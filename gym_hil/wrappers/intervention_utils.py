@@ -159,6 +159,10 @@ class KeyboardController(InputController):
                     self.open_gripper_command = True
                 elif key == keyboard.Key.ctrl_l:
                     self.close_gripper_command = True
+                elif hasattr(key, 'char') and key.char == 'o':
+                    self.open_gripper_command = True
+                elif hasattr(key, 'char') and key.char == 'c':
+                    self.close_gripper_command = True
                 elif key == keyboard.Key.enter:
                     self.key_states["success"] = True
                     self.episode_end_status = "success"
@@ -190,6 +194,10 @@ class KeyboardController(InputController):
                     self.open_gripper_command = False
                 elif key == keyboard.Key.ctrl_l:
                     self.close_gripper_command = False
+                elif hasattr(key, 'char') and key.char == 'o':
+                    self.open_gripper_command = False
+                elif hasattr(key, 'char') and key.char == 'c':
+                    self.close_gripper_command = False
             except AttributeError:
                 pass
 
@@ -199,7 +207,8 @@ class KeyboardController(InputController):
         print("Keyboard controls:")
         print("  Arrow keys: Move in X-Y plane")
         print("  Shift and Shift_R: Move in Z axis")
-        print("  Right Ctrl and Left Ctrl: Open and close gripper")
+        print("  O key: OPEN gripper")
+        print("  C key: CLOSE gripper")
         print("  Enter: End episode with SUCCESS")
         print("  Backspace: End episode with FAILURE")
         print("  Space: Start/Stop Intervention")

@@ -14,7 +14,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 from gym_hil.controllers.opspace import opspace
+from gym_hil.controllers.ik_control import ik_control
 
 __all__ = [
     "opspace",
+    "ik_control",
 ]
