@@ -8,6 +8,7 @@ The `gym-hil` package provides environments designed for human-in-the-loop reinf
 
 Currently available environments:
 - **Franka Panda Robot**: A robotic manipulation environment for Franka Panda robot based on MuJoCo
+- **SO-101 Robot**: A 5-DOF robotic arm environment with IK-based Cartesian control
 
 **What is Human-In-the-Loop (HIL) RL?**
 
@@ -79,6 +80,30 @@ env.close()
 imageio.mimsave("franka_render_test.mp4", frames, fps=20)
 ```
 
+## SO-101 Environment Quick Start
+
+```python
+import gymnasium as gym
+import numpy as np
+
+import gym_hil
+
+# Use the SO-101 environment
+env = gym.make("gym_hil/SO101PickCubeBase-v0", render_mode="rgb_array")
+
+obs, info = env.reset()
+
+for i in range(100):
+    # Random Cartesian delta: [dx, dy, dz, drx, dry, drz, gripper]
+    action = np.random.uniform(-0.01, 0.01, 7)
+    obs, reward, terminated, truncated, info = env.step(action)
+
+    if terminated:
+        obs, info = env.reset()
+
+env.close()
+```
+
 ## Available Environments
 
 ### Franka Panda Robot Environments
@@ -86,6 +111,13 @@ imageio.mimsave("franka_render_test.mp4", frames, fps=20)
 - **PandaPickCubeBase-v0**: The core environment with the Franka arm and a cube to pick up.
 - **PandaPickCubeGamepad-v0**: Includes gamepad control for teleoperation.
 - **PandaPickCubeKeyboard-v0**: Includes keyboard control for teleoperation.
+
+### SO-101 Robot Environments
+
+- **SO101PickCubeBase-v0**: The core environment with the SO-101 5-DOF arm and a cube to pick up.
+- **SO101PickCubeGamepad-v0**: Includes gamepad control for teleoperation.
+- **SO101PickCubeKeyboard-v0**: Includes keyboard control for teleoperation.
+- **SO101PickCubeViewer-v0**: Environment with passive viewer for visualization.
 
 ## Teleoperation
 
@@ -96,6 +128,27 @@ python examples/test_teleoperation.py
 ```
 
 To run the teleoperation with keyboard you can use the option `--use-keyboard`.
+
+### SO-101 Teleoperation
+
+Test the SO-101 environment and controls:
+
+```bash
+# Run validation test
+MUJOCO_GL=glfw mjpython gym_hil/so101/tests/test_so101_teleop.py
+
+# Run interactive teleoperation
+MUJOCO_GL=glfw mjpython gym_hil/so101/scripts/so101_teleop_continuous.py
+```
+
+Keyboard controls for SO-101:
+- **Arrow keys**: Move in X-Y plane
+- **Shift/Shift_R**: Move in Z axis
+- **O key**: Open gripper
+- **C key**: Close gripper
+- **Enter**: End episode with SUCCESS
+- **Backspace**: End episode with FAILURE
+- **Space**: Start/Stop Intervention
 
 ### Human-in-the-Loop Wrappers
 

@@ -16,13 +16,15 @@
 
 import gymnasium as gym
 
-from gym_hil.mujoco_gym_env import FrankaGymEnv, GymRenderingSpec, MujocoGymEnv
+from gym_hil.mujoco_gym_env import FrankaGymEnv, GymRenderingSpec, MujocoGymEnv, RobotGymEnv, SO101GymEnv
 from gym_hil.wrappers.factory import make_env, wrap_env
 from gym_hil.wrappers.viewer_wrapper import PassiveViewerWrapper
 
 __all__ = [
     "MujocoGymEnv",
+    "RobotGymEnv",
     "FrankaGymEnv",
+    "SO101GymEnv",
     "GymRenderingSpec",
     "PassiveViewerWrapper",
     "make_env",
@@ -114,4 +116,48 @@ register(
     entry_point="gym_hil.wrappers.factory:make_env",
     max_episode_steps=100,
     kwargs={"env_id": "gym_hil/PandaArrangeBoxesBase-v0", "use_viewer": True, "gripper_penalty": -0.05},
+)
+
+# SO-101 environments
+register(
+    id="gym_hil/SO101PickCubeBase-v0",
+    entry_point="gym_hil.envs:SO101PickCubeGymEnv",
+    max_episode_steps=100,
+)
+
+register(
+    id="gym_hil/SO101PickCubeViewer-v0",
+    entry_point=lambda **kwargs: PassiveViewerWrapper(gym.make("gym_hil/SO101PickCubeBase-v0", **kwargs)),
+    max_episode_steps=100,
+)
+
+register(
+    id="gym_hil/SO101PickCube-v0",
+    entry_point="gym_hil.wrappers.factory:make_env",
+    max_episode_steps=100,
+    kwargs={
+        "env_id": "gym_hil/SO101PickCubeBase-v0",
+    },
+)
+
+register(
+    id="gym_hil/SO101PickCubeGamepad-v0",
+    entry_point="gym_hil.wrappers.factory:make_env",
+    max_episode_steps=100,
+    kwargs={
+        "env_id": "gym_hil/SO101PickCubeBase-v0",
+        "use_viewer": True,
+        "use_gamepad": True,
+    },
+)
+
+register(
+    id="gym_hil/SO101PickCubeKeyboard-v0",
+    entry_point="gym_hil.wrappers.factory:make_env",
+    max_episode_steps=100,
+    kwargs={
+        "env_id": "gym_hil/SO101PickCubeBase-v0",
+        "use_viewer": True,
+        "gripper_penalty": -0.05,
+    },
 )

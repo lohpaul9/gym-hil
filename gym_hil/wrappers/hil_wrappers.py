@@ -238,6 +238,9 @@ class InputsControlWrapper(gym.Wrapper):
 
         if is_intervention:
             action = gamepad_action
+        elif action is None:
+            # If no action provided and not intervening, use zero action
+            action = np.zeros(self.env.action_space.shape, dtype=np.float32)
 
         # Step the environment
         obs, reward, terminated, truncated, info = self.env.step(action)
